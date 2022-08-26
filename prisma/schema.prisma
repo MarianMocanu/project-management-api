@@ -6,6 +6,48 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Project {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  title           String   @db.VarChar(255)
+  description     String   @db.Text
+  Task            Task[]
+  assignedPersons Person[]
+}
+
+model Person {
+  id               Int               @id @default(autoincrement())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  firstName        String            @db.VarChar(255)
+  lastName         String            @db.VarChar(255)
+  email            String            @db.VarChar(255)
+  project          Project[]
+  Task             Task[]
+  TimeRegistration TimeRegistration?
+}
+
+model Task {
+  id               Int                @id @default(autoincrement())
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  project          Project            @relation(fields: [projectId], references: [id])
+  projectId        Int                @unique
+  TimeRegistration TimeRegistration[]
+  assignedPersons  Person[]
+}
+
+model TimeRegistration {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  task      Task     @relation(fields: [taskId], references: [id])
+  taskId    Int      @unique
+  createdBy Person   @relation(fields: [personId], references: [id])
+  personId  Int      @unique
 }

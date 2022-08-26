@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/MarianMocanu/project-management-api#readme",
   "dependencies": {
+    "@prisma/client": "^4.2.1",
     "express": "^4.18.1"
   },
   "devDependencies": {
